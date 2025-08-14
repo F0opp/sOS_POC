@@ -1,5 +1,16 @@
 set -e
 
+echo Now assembling, compiling, and linking your kernel:
+nasm -f elf32 -o kernel.o kernel.asm
+#rem Remember this spot here: We will add 'gcc' commands here to compile C sources
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -I./include -c -o sOS.o sOS.c
+gcc -m32 -ffreestanding -fno-stack-protector -fno-pic -fno-builtin -Wall -O -nostdinc -I./include -c -o sOS.o sOS.c
+
+#rem This links all your files. Remember that as you add *.o files, you need to
+#rem add them after kernel.o. If you don't add them at all, they won't be in your kernel!
+ld -m elf_i386 -T link.ld -o kernel.bin kernel.o sOS.o
+echo Done!
+
 IMG=myos.img           # Name of the disk image
 SIZE=64M               # Size of disk image
 MOUNTDIR=/mnt/myos     # Temporary mount point
@@ -44,10 +55,6 @@ echo "- Mounting partition..."
 sudo mkdir -p $MOUNTDIR
 sudo mount $PART $MOUNTDIR
 
-#assemble kernel
-echo "- Assembling kernel..."
-nasm -f bin kernel.asm -o kernel.bin
-
 #test if kernel is mboot2 valid
 echo "- Testing if kernel is multiboot2 valid"
 if grub-file --is-x86-multiboot2 $KERNEL; then
@@ -65,10 +72,10 @@ sudo cp $GRUB_CFG $MOUNTDIR/boot/grub/
 #install grub
 echo "- Installing GRUB..."
 sudo grub-install \
-    --target=i386-pc \
-    --boot-directory=$MOUNTDIR/boot \
-    --modules="normal part_msdos ext2 multiboot" \
-    --recheck $LOOP
+  --target=i386-pc \
+  --boot-directory=$MOUNTDIR/boot \
+  --modules="normal part_msdos biosdisk fat multiboot2" \
+  --recheck $LOOP	
 
 #cleanup
 echo "- Unmounting and detaching loop device..."

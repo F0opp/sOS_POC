@@ -1,5 +1,6 @@
 [BITS 32]
-[ORG 0x100000]   
+
+extern sOS
 
 ;Multiboot2 header consts
 MULTIBOOT_HEADER_MAGIC equ 0xE85250D6
@@ -17,26 +18,16 @@ multiboot_header_start:
 	dd MULTIBOOT_CHECKSUM 
 	
 	;tags
-    align 8
-    dw 2 ;type = 2 (address tag)
-    dw 0 ;flags = 0
-    dd 24 ;size = 24 bytes
-    dd multiboot_header_start ;header_addr (runtime phys addr)
-    dd 0x100000 ;load_addr  (where to load file)
-    dd 0 ;load_end_addr (0 = file size)
-    dd 0 ;size of this tag (must be 8)
-	
+	; entry address tag (type=3)
 	align 8
-    dw 3 ;type = 3
-    dw 0 ;flags = 0
-    dd 12 ;size = 12 bytes
-    dd start
+	dw 3, 0
+	dd 12
+	dd start
 	
-	;end tag
-    align 8
-    dw 0 ;type = 0 (end)
-    dw 0
-    dd 8 ;size = 8
+	; end tag
+	align 8
+	dw 0, 0
+	dd 8
 multiboot_header_end:
 
 SECTION .data 
@@ -46,17 +37,7 @@ string: db 'Welcome to sOS!', 0
 SECTION .text
 start:
     mov esp, _sys_stack
-    mov edi, 0xB8000
-
-    mov esi, string
-    mov ah, 0x0F
-	print:
-		mov al, [esi]
-		cmp al, 0
-		je stublet
-		inc esi
-		stosw
-		jmp print
+    call sOS
     jmp stublet
 
 stublet:
