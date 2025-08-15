@@ -1,3 +1,5 @@
+#include "string.h"
+
 #define BYTE_ROW_LEN 160
 #define ROW_LEN 80
 #define NUM_ROWS 25
@@ -11,13 +13,13 @@
 #define SLASH_CODE 0x35
 
 
-void setCords(int r, int c, unsigned char val, unsigned char atr);
-void setCell(unsigned char val, unsigned char atr);
+void setCords(int r, int c, byte val, byte atr);
+void setCell(byte val, byte atr);
 void deleteChr();
 void newLine();
-void printChr(unsigned char chr);
-void printStr(const unsigned char *text);
+void printChr(byte chr);
+void printStr(const byte *text);
 void clear();
 
 
-void read(unsigned char *str);
+void read(byte *str);

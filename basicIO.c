@@ -1,7 +1,7 @@
 #include "basicIO.h"
 #include "string.h"
 
-volatile unsigned char *screen = (volatile unsigned char *) 0xB8000;
+volatile byte *screen = (volatile byte *) 0xB8000;
 int row = 0, col = 0;
 
 
@@ -11,14 +11,14 @@ int getIndex(int r, int c)
 }
 
 
-void setCords(int r, int c, unsigned char val, unsigned char atr)
+void setCords(int r, int c, byte val, byte atr)
 {
 	int ind = getIndex(r, c);
 	screen[ind] = val;
 	screen[ind+1] = atr;
 }
 
-void setCell(unsigned char val, unsigned char atr)
+void setCell(byte val, byte atr)
 {
 	setCords(row, col, val, atr);
 }
@@ -52,7 +52,7 @@ void newLine()
 }
 
 
-void printChr(unsigned char chr)
+void printChr(byte chr)
 {
 	if (chr == '\n')
 	{
@@ -70,7 +70,7 @@ void printChr(unsigned char chr)
 }
 
 
-void printStr(const unsigned char *text)
+void printStr(const byte *text)
 {
 	for (int i = 0; text[i]; i++)
 	{
@@ -82,14 +82,7 @@ void printStr(const unsigned char *text)
 
 void clear()
 {
-	for (int r = 0; r < NUM_ROWS; r++)
-	{
-		for (int c = 0; c < ROW_LEN; c++)
-		{
-			setCords(r, c, 0, 0);
-		}
-	}
-
+	memset(screen, 0, NUM_ROWS*BYTE_ROW_LEN);
 	row = col = 0;
 }
 
@@ -97,18 +90,18 @@ void clear()
 
 
 
-unsigned char scancodes[0x80] = {0, 0, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 0, 0, 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 0, 0, 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', '`', 0, '\\', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 0, '*', 0, ' ', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '7', '8', '9', '-', '4', '5', '6', '+', '1', '2', '3', '0', '.'};
-unsigned char capslockScancodes[0x80] = {0, 0, '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', 0, 0, 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', 0, 0, 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '"', '~', 0, '|', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', 0, '*', 0, ' ', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '7', '8', '9', '-', '4', '5', '6', '+', '1', '2', '3', '0', '.'};
+byte scancodes[0x80] = {0, 0, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 0, 0, 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 0, 0, 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', '`', 0, '\\', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 0, '*', 0, ' ', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '7', '8', '9', '-', '4', '5', '6', '+', '1', '2', '3', '0', '.'};
+byte capslockScancodes[0x80] = {0, 0, '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', 0, 0, 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', 0, 0, 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '"', '~', 0, '|', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', 0, '*', 0, ' ', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '7', '8', '9', '-', '4', '5', '6', '+', '1', '2', '3', '0', '.'};
 
 
-inline unsigned char getByteFromPort(unsigned short port)
+inline byte getByteFromPort(unsigned short port)
 {
-	unsigned char byte;
+	byte byte;
 	asm volatile ("inb %1, %0" : "=a"(byte) : "Nd"(port));
 	return byte;
 }
 
-unsigned char readByte()
+byte readByte()
 {
 	int status = 0;
 
@@ -122,7 +115,7 @@ unsigned char readByte()
 }
 
 
-void addToBuff(unsigned char *str, int *top, unsigned char val)
+void addToBuff(byte *str, int *top, byte val)
 {
 	if (top == STR_MAX_LEN-1)
 	{
@@ -137,10 +130,10 @@ void addToBuff(unsigned char *str, int *top, unsigned char val)
 
 
 int capslock = 0;
-void read(unsigned char *str)
+void read(byte *str)
 {
 	int top = 0;
-	unsigned char inp = 0;
+	byte inp = 0;
 
 
 	while (inp != ENTER_CODE)
@@ -189,10 +182,8 @@ void read(unsigned char *str)
 
 
 	newLine();
-	for (int i = top; i < STR_MAX_LEN; i++)
-	{
-		str[i] = 0;
-	}
+	str[top] = 0;
+	memset(str + top, 0, STR_MAX_LEN - strlen(str));
 }
 
 

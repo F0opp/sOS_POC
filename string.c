@@ -1,7 +1,7 @@
 #include "string.h"
 
 
-void memset(char *mem, char val, int size)
+void memset(byte *mem, byte val, int size)
 {
 	for (int i = 0; i < size; i++)
 	{
@@ -9,7 +9,7 @@ void memset(char *mem, char val, int size)
 	}
 }
 
-void memcpy(char *dst, const char *src, int size)
+void memcpy(byte *dst, const byte *src, int size)
 {
 	for (int i = 0; i < size; i++)
 	{
@@ -17,7 +17,7 @@ void memcpy(char *dst, const char *src, int size)
 	}
 }
 
-int strlen(const char *str)
+int strlen(const byte *str)
 {
 	int size = 0;
 	while (str[size])
@@ -27,17 +27,17 @@ int strlen(const char *str)
 	return size;
 }
 
-void strset(char *str, char val)
+void strset(byte *str, byte val)
 {
 	memset(str, val, strlen(str)+1);
 }
 
-void strcpy(char *dst, const char *src)
+void strcpy(byte *dst, const byte *src)
 {
 	memcpy(dst, src, strlen(src)+1);
 }
 
-int strcmppre(const char *s, const char *t, int size)
+int strcmppre(const byte *s, const byte *t, int size)
 {
 	for (int i = 0; i < size; i++)
 	{
@@ -53,7 +53,7 @@ int strcmppre(const char *s, const char *t, int size)
 	return 1;
 }
 
-int strcmp(const char *s, const char *t)
+int strcmp(const byte *s, const byte *t)
 {
 	int sSize = strlen(s), tSize = strlen(t);
 	if (sSize != tSize)
