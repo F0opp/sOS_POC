@@ -4,12 +4,15 @@ volatile unsigned char *screen = (volatile unsigned char *) 0xB8000;
 int row = 0, col = 0;
 
 
-
+void setCords(int r, int c, unsigned char val, unsigned char atr)
+{
+	screen[r*BYTE_ROW_LEN + BYTE_CELL_LEN*col] = val;
+	screen[r*BYTE_ROW_LEN + BYTE_CELL_LEN*col + 1] = atr;
+}
 
 void setCell(unsigned char val, unsigned char atr)
 {
-	screen[row*BYTE_ROW_LEN + BYTE_CELL_LEN*col] = val;
-	screen[row*BYTE_ROW_LEN + BYTE_CELL_LEN*col + 1] = atr;
+	setCords(row, col, val, atr);
 }
 
 
