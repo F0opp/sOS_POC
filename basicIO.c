@@ -1,5 +1,4 @@
 #include "basicIO.h"
-#include "string.h"
 
 volatile byte *screen = (volatile byte *) 0xB8000;
 int row = 0, col = 0;
@@ -129,7 +128,7 @@ void addToBuff(byte *str, int *top, byte val)
 
 
 
-int capslock = 0;
+bool capslock = false;
 void read(byte *str)
 {
 	int top = 0;

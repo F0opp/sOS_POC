@@ -37,28 +37,28 @@ void strcpy(byte *dst, const byte *src)
 	memcpy(dst, src, strlen(src)+1);
 }
 
-int strcmppre(const byte *s, const byte *t, int size)
+bool strcmppre(const byte *s, const byte *t, int size)
 {
 	for (int i = 0; i < size; i++)
 	{
 		if (s[i] == 0 && t[i] == 0)
 		{
-			return 1;
+			return true;
 		}
 		if (s[i] != t[i])
 		{
-			return 0;
+			return false;
 		}
 	}
-	return 1;
+	return true;
 }
 
-int strcmp(const byte *s, const byte *t)
+bool strcmp(const byte *s, const byte *t)
 {
 	int sSize = strlen(s), tSize = strlen(t);
 	if (sSize != tSize)
 	{
-		return 0;
+		return false;
 	}
 	return strcmppre(s, t, sSize);
 }
