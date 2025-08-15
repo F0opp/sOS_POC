@@ -11,4 +11,5 @@ void deleteChr();
 void newLine();
 void printChr(unsigned char chr);
 void printStr(const unsigned char *text);
+void clear();
 

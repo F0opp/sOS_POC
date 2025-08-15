@@ -53,3 +53,17 @@ void printStr(const unsigned char *text)
 		printChr(text[i]);
 	}
 }
+
+
+void clear()
+{
+	for (int r = 0; r < NUM_ROWS; r++)
+	{
+		for (int c = 0; c < ROW_LEN; c++)
+		{
+			setCords(r, c, 0, 0);
+		}
+	}
+
+	row = col = 0;
+}
