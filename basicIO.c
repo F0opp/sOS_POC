@@ -1,13 +1,21 @@
 #include "basicIO.h"
+#include "string.h"
 
 volatile unsigned char *screen = (volatile unsigned char *) 0xB8000;
 int row = 0, col = 0;
 
 
+int getIndex(int r, int c)
+{
+	return r*BYTE_ROW_LEN + BYTE_CELL_LEN*c;
+}
+
+
 void setCords(int r, int c, unsigned char val, unsigned char atr)
 {
-	screen[r*BYTE_ROW_LEN + BYTE_CELL_LEN*c] = val;
-	screen[r*BYTE_ROW_LEN + BYTE_CELL_LEN*c + 1] = atr;
+	int ind = getIndex(r, c);
+	screen[ind] = val;
+	screen[ind+1] = atr;
 }
 
 void setCell(unsigned char val, unsigned char atr)
@@ -36,16 +44,9 @@ void newLine()
 	{
 		for (int r = 0; r < NUM_ROWS-1; r++)
 		{
-			for (int c = 0; c < ROW_LEN; c++)
-			{
-				int index = (r+1)*BYTE_ROW_LEN + BYTE_CELL_LEN*c;
-				setCords(r, c, screen[index], screen[index+1]);
-			}
+			memcpy(screen + getIndex(r, 0), screen + getIndex(r+1, 0), BYTE_ROW_LEN);
 		}
-		for (int c = 0; c < ROW_LEN; c++)
-		{
-			setCords(NUM_ROWS-1, c, 0, 0);
-		}
+		memset(screen + getIndex(NUM_ROWS-1, 0), 0, BYTE_ROW_LEN);
 		row--;
 	}
 }
