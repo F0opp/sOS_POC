@@ -154,10 +154,10 @@ void read(byte *str)
 
 		if (inp == BACKSPACE_CODE)
 		{
-			deleteChr();
 			if (top != 0)
 			{
 				top--;
+				deleteChr();
 			}
 		}
 

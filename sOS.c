@@ -10,15 +10,20 @@ void sOS(void)
 	byte str[STR_MAX_LEN];
 	while (true)
 	{
+		printChr('>');
 		read(str);
 
 		if (strcmp(str, "clear"))
 		{
 			clear();
 		}
-		if (strcmppre(str, "echo ",  strlen("echo ")))
+		else if (strcmppre(str, "echo ",  strlen("echo ")))
 		{
 			printStr(str + strlen("echo "));
+		}
+		else
+		{
+			printStr("no such command");
 		}
 	}
 }
