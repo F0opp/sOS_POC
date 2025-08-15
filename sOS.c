@@ -21,6 +21,23 @@ void sOS(void)
 		{
 			printStr(str + strlen("echo "));
 		}
+		else if (strcmppre(str, "yes ", strlen("yes ")) || strcmp(str, "yes"))
+		{
+			byte *prnt = 0;
+			if (strcmp(str, "yes"))
+			{
+				prnt = "y";
+			}
+			else
+			{
+				prnt = str + strlen("yes ");
+			}
+
+			while (true)
+			{
+				printStr(prnt);
+			}
+		}
 		else
 		{
 			printStr("no such command");
