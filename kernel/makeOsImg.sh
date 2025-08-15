@@ -3,12 +3,12 @@ set -e
 echo Now assembling, compiling, and linking your kernel:
 nasm -f elf32 -o kernel.o kernel.asm
 #rem Remember this spot here: We will add 'gcc' commands here to compile C sources
-gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -I./include -c -o sOS.o sOS.c
 gcc -m32 -ffreestanding -fno-stack-protector -fno-pic -fno-builtin -Wall -O -nostdinc -I./include -c -o sOS.o sOS.c
+gcc -m32 -ffreestanding -fno-stack-protector -fno-pic -fno-builtin -Wall -O -nostdinc -I./include -c -o basicIO.o basicIO.c
 
 #rem This links all your files. Remember that as you add *.o files, you need to
 #rem add them after kernel.o. If you don't add them at all, they won't be in your kernel!
-ld -m elf_i386 -T link.ld -o kernel.bin kernel.o sOS.o
+ld -m elf_i386 -T link.ld -o kernel.bin kernel.o sOS.o basicIO.o
 echo Done!
 
 IMG=myos.img           # Name of the disk image
