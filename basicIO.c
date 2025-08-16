@@ -79,6 +79,35 @@ void printStr(const byte *text)
 }
 
 
+void printNum(int num)
+{
+	if (num == 0)
+	{
+		printChr('0');
+		newLine();
+		return ;
+	}
+	byte str[STR_MAX_LEN];
+	memset(str, 0, STR_MAX_LEN);
+	int sz = 0, cpy = num;
+
+	while (cpy)
+	{
+		sz++;
+		cpy /= 10;
+	}
+	while (num)
+	{
+		sz--;
+		str[sz] = num%10 + '0';
+		num /= 10;
+	}
+
+	
+	printStr(str);
+}
+
+
 void clear()
 {
 	memset(screen, 0, NUM_ROWS*BYTE_ROW_LEN);
@@ -150,7 +179,7 @@ void read(byte *str)
 
 			continue;
 		}
-
+		
 
 		if (inp == BACKSPACE_CODE)
 		{
@@ -161,10 +190,16 @@ void read(byte *str)
 			}
 		}
 
-		if (inp == CAPSLOCK_CODE)
+		if (inp == CAPSLOCK_CODE || inp == LSHIFT_CODE || inp == RSHIFT_CODE || inp == LSHIFT_CODE + RELEASE_CODE || inp == RSHIFT_CODE + RELEASE_CODE)
 		{
 			capslock = !capslock;
 		}
+
+		if (inp >= RELEASE_CODE)
+		{
+			continue;
+		}
+		
 
 		if (scancodes[inp] != 0)
 		{

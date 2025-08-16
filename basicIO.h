@@ -11,7 +11,9 @@
 #define CAPSLOCK_CODE 0x3a
 #define SPECIAL_CODE 0xe0
 #define SLASH_CODE 0x35
-
+#define LSHIFT_CODE 0x2a
+#define RSHIFT_CODE 0x36
+#define RELEASE_CODE 0x80
 
 void setCords(int r, int c, byte val, byte atr);
 void setCell(byte val, byte atr);
@@ -19,6 +21,7 @@ void deleteChr();
 void newLine();
 void printChr(byte chr);
 void printStr(const byte *text);
+void printNum(int num);
 void clear();
 
 
