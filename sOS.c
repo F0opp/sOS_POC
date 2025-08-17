@@ -1,5 +1,30 @@
 #include "basicIO.h"
 
+void printLogo()
+{
+	clear();
+	printStr("         .###*");
+	printStr("         #####-");
+	printStr("          *##=");
+	printStr("               ");
+	printStr("                ");
+	printStr(".%%%%%***********#%%%*");
+	printStr("  *%%%%=            ##");
+	printStr("   .%%%%%            %");
+	printStr("     #%%%%:          =");
+	printStr("      :%%%%#");
+	printStr("        %%%%%.          ");
+	printStr("         +%%%%*         ");
+	printStr("          .%%=          ");
+	printStr("         .%%");
+	printStr("        *%- ");
+	printStr("      .%%.            =:");
+	printStr("    .#%:             .%.");
+	printStr("   :%#              *%# ");
+	printStr("  %%%%%%%%%%%%%%%%%%%%*");
+	printStr("-%%%%%%%%%%%%%%%%%%%%%.");
+	newLine();
+}
 
 void sOS(void)
 {
@@ -8,6 +33,9 @@ void sOS(void)
 	
 
 	byte str[STR_MAX_LEN];
+	
+	printLogo();
+	
 	while (true)
 	{
 		printChr('>');
@@ -37,6 +65,10 @@ void sOS(void)
 			{
 				printStr(prnt);
 			}
+		}
+		else if (strcmp(str, "logo"))
+		{
+			printLogo();
 		}
 		else
 		{
