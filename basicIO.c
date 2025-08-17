@@ -27,7 +27,8 @@ void deleteChr()
 {
 	if (col == 0)
 	{
-		return ;
+		row--;
+		col = ROW_LEN;
 	}
 
 	col--;
@@ -145,11 +146,6 @@ byte readByte()
 
 void addToBuff(byte *str, int *top, byte val)
 {
-	if (top == STR_MAX_LEN-1)
-	{
-		return ;
-	}
-
 	printChr(val);
 	str[*top] = val;
 	(*top)++;

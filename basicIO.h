@@ -3,7 +3,6 @@
 #define BYTE_ROW_LEN 160
 #define ROW_LEN 80
 #define NUM_ROWS 25
-#define STR_MAX_LEN ROW_LEN
 #define BYTE_CELL_LEN 2
 
 #define ENTER_CODE 0x1c
