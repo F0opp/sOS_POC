@@ -51,8 +51,7 @@ void newLine()
 	}
 }
 
-
-void printChr(byte chr)
+void printAtrChr(byte chr, byte atr)
 {
 	if (chr == '\n')
 	{
@@ -60,7 +59,7 @@ void printChr(byte chr)
 		return ;
 	}
 	
-	setCell(chr, 0x07);
+	setCell(chr, atr);
 	col++;
 
 	if (col == ROW_LEN)
@@ -69,14 +68,24 @@ void printChr(byte chr)
 	}
 }
 
+void printChr(byte chr)
+{
+	printAtrChr(chr, 0x07);
+}
 
-void printStr(const byte *text)
+void printAtrStr(const byte *text, byte atr)
 {
 	for (int i = 0; text[i]; i++)
 	{
-		printChr(text[i]);
+		printAtrChr(text[i], atr);
 	}
 	newLine();
+}
+
+
+void printStr(const byte *text)
+{
+	printAtrStr(text, 0x07);
 }
 
 
