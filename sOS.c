@@ -1,8 +1,15 @@
 #include "basicIO.h"
+#include "sOS.h"
+
 
 void printLogo()
 {
-	clear();
+	if (logoClearChat)
+	{
+		clear();
+	}
+
+
 	printStr("         .###*");
 	printStr("         #####-");
 	printStr("          *##=");
@@ -69,6 +76,21 @@ void sOS(void)
 		else if (strcmp(str, "logo"))
 		{
 			printLogo();
+		}
+		else if (strcmppre(str, "logoClearChat=", strlen("logoClearChat=")))
+		{
+			if (strcmp(str, "logoClearChat=true"))
+			{
+				logoClearChat = true;
+			}
+			else if (strcmp(str, "logoClearChat=false"))
+			{
+				logoClearChat = false;
+			}
+			else
+			{
+				printStr("no such option");
+			}
 		}
 		else
 		{
